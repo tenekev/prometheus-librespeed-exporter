@@ -78,7 +78,7 @@ else
 			JSON=$(librespeed-cli $DOWNLOAD_SWITCH $UPLOAD_SWITCH --local-json $BACKENDS_JSON_FILE --server $SERVER_ID --json)
 		else
 			echo "# Not using custom backends file"
-			JSON=$(librespeed-cli $DOWNLOAD_SWITCH $UPLOAD_SWITCH --json)
+			JSON=$(librespeed-cli $DOWNLOAD_SWITCH $UPLOAD_SWITCH --server $SERVER_ID --json)
 		fi
 
 		echo "# JSON: $JSON"
