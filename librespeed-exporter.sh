@@ -33,20 +33,23 @@ then
 
 	# Parse out the values
 	SERVER=$(echo $JSON | jq ".server.name")
+	PUBLICIP=$(echo $JSON | jq ".client.ip")
 	BYTES_SENT=$(echo $JSON | jq ".bytes_sent")
 	BYTES_RECEIVED=$(echo $JSON | jq ".bytes_received")
 	PING=$(echo $JSON | jq ".ping")
 	JITTER=$(echo $JSON | jq ".jitter")
 	UPLOAD=$(echo $JSON | jq ".upload")
 	DOWNLOAD=$(echo $JSON | jq ".download")
-
-        echo "# SERVER $SERVER"
+  RAW=$(echo $JSON)
 
 	# Produce the export line
+	echo librespeed_curent_server $SERVER
+	#echo librespeed_public_ip $PUBLICIP
 	echo librespeed_bytes_sent{server=$SERVER} $BYTES_SENT
 	echo librespeed_bytes_received{server=$SERVER} $BYTES_RECEIVED
 	echo librespeed_ping{server=$SERVER} $PING
 	echo librespeed_jitter{server=$SERVER} $JITTER
+  echo librespeed_rawjson{server=$SERVER} $RAW
 
 	if [ "$PERFORM_DOWNLOAD" != "FALSE" ]
 	then
@@ -62,11 +65,11 @@ then
 else
 	echo "# Server's specified: $SERVER_IDS"
 
-	IFS='|' read -ra SERVER_ID_ARRAY <<< "$SERVER_IDS"
+	IFS=',' read -ra SERVER_ID_ARRAY <<< "$SERVER_IDS"
 
 	for SERVER_ID in "${SERVER_ID_ARRAY[@]}"
 	do
-	        echo "# SERVER_ID $SERVER_ID"
+	  echo "# SERVER_ID $SERVER_ID"
 
 		# Get the result
 		if [ -f "$BACKENDS_JSON_FILE" ]
@@ -82,6 +85,7 @@ else
 
 		# Parse out the values
 		SERVER=$(echo $JSON | jq ".server.name")
+		PUBLICIP=$(echo $JSON | jq ".client.ip")
 		BYTES_SENT=$(echo $JSON | jq ".bytes_sent")
 		BYTES_RECEIVED=$(echo $JSON | jq ".bytes_received")
 		PING=$(echo $JSON | jq ".ping")
@@ -89,9 +93,10 @@ else
 		DOWNLOAD=$(echo $JSON | jq ".download")
 		UPLOAD=$(echo $JSON | jq ".upload")
 
-	        echo "# SERVER $SERVER"
+	  echo "# SERVER $SERVER"
 
 		# Produce the export line
+		#echo librespeed_public_ip $PUBLICIP
 		echo librespeed_bytes_sent{server=$SERVER} $BYTES_SENT
 		echo librespeed_bytes_received{server=$SERVER} $BYTES_RECEIVED
 		echo librespeed_ping{server=$SERVER} $PING
@@ -108,4 +113,3 @@ else
 		fi
 	done
 fi
-
