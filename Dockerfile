@@ -41,6 +41,7 @@ RUN export ARCH=$(apk info --print-arch) && \
 
 COPY config.yaml config.yaml
 COPY librespeed-exporter.sh /usr/local/bin/librespeed-exporter.sh
+RUN chmod +x /usr/local/bin/librespeed-exporter.sh
 
 EXPOSE 9469
 
